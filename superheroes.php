@@ -1,5 +1,5 @@
 <?php
-
+$query = $_REQUEST["query"];
 $superheroes = [
   [
       "id" => 1,
@@ -63,10 +63,31 @@ $superheroes = [
   ], 
 ];
 
-?>
+if ($query != "" ){
+    $found = false;
+    foreach($superheroes as $s){
+        $test = strtolower($query);
+        $len = strlen($test);
+        $data = strtolower($s["alias"]);
+        $names = strtolower($s["name"]);
+        if(stristr($test,$data) || stristr($test,$names) || strpos($names, $test) !== false || strpos($data, $test) !== false){
+            $found = true;
+            echo "<h1 id='heading'>".strtoupper($s["alias"])."</h1>";
+            echo "<h3 id='heading'>A.K.A ".strtoupper($s["name"])."</h3>";
+            echo "<p>".$s["biography"]."</p>";
+        }
+    }
+    if(!$found){
+        echo "<h5 id='errormessage'>SUPERHERO NOT FOUND</h5>";
+    }
+    
+}else{
+    echo "<ul>";
+    foreach($superheroes as $s){
+        echo "<li>".$s["alias"]."</li>";
+    }
+    echo "</ul>";
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+}
+
+?>
